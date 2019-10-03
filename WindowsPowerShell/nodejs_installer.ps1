@@ -25,6 +25,8 @@ $install_git = $FALSE
 $install_gulp = $TRUE
 $install_jspm = $TRUE
 $install_eslint = $TRUE
+$install_expo = $TRUE
+$install_firebase = $TRUE
 
 write-host "`n----------------------------"
 write-host " system requirements checking  "
@@ -188,6 +190,8 @@ if ($install_jspm) {
 }
 
 
+
+
 if (Get-Command eslint -errorAction SilentlyContinue) {
     $eslint_prev_v = (eslint -v)
 }
@@ -206,6 +210,56 @@ if ($install_eslint) {
     write-host "Installing eslint globally"
     npm install --global eslint
 }
+
+
+###start::Expo Install
+if (Get-Command expo -errorAction SilentlyContinue) {
+    $expo_prev_v = (expo --version)
+}
+
+if ($expo_prev_v) {
+    write-host "[EXPO] expo is already installed :"
+    write-host $expo_prev_v
+
+    $confirmation = read-host "Are you sure you want to replace this version ? [y/N]"
+    if ($confirmation -ne "y") {
+        $install_expo = $FALSE
+    }
+}
+
+if ($install_expo) {
+    write-host "Installing expo globally"
+    npm install --global expo-cli
+}
+###end::Expo Install
+
+
+###start::Firebase
+if (Get-Command firebase -errorAction SilentlyContinue) {
+    $firebase_prev_v = (firebase --version)
+}
+
+if ($firebase_prev_v) {
+    write-host "[Firebase] Firebase is already installed :"
+    write-host $firebase_prev_v
+
+    $confirmation = read-host "Are you sure you want to replace Firebase new version ? [y/N]"
+    if ($confirmation -ne "y") {
+        $install_firebase = $FALSE
+    }
+}
+
+if ($install_firebase) {
+    write-host "Installing firebase globally"
+    npm install --global firebase
+
+    write-host "Installing firebase tools globally"
+    npm install --global firebase-tools
+
+}
+###end::Firebase
+
+
 
 ### extras
 
