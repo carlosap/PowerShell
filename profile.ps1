@@ -2,12 +2,20 @@ Import-Module posh-git
 # Welcome message
 "You are now entering PowerShell : " + $env:Username
 
-#repos folder
-#$localpath = Join-Path $env:USERPROFILE 'some\path'
+#------------------------------------------------------------------------------------------
+#repos folder  
+$github_repo = "C:\Users\$env:Username\source\repos\github.com"
+if(![System.IO.Directory]::Exists($github_repo)){
+    write-host "Creating Github Repo - $github_repo"
+    [System.IO.Directory]::CreateDirectory($github_repo)
+}
+
 function repos { set-location "C:\Users\$env:Username\source\repos" }
 function home { set-location $env:HOMEPATH }
 function doc { set-location "C:\Users\$env:UserName\Documents" }
+function github { set-location "C:\Users\$env:Username\source\repos\github.com" }
 
+#------------------------------------------------------------------------------------------
 #Android Emulator - make sure you installed in the default location
 function androids { 
     set-location "C:\Users\$env:Username\AppData\Local\Android\Sdk\emulator"
@@ -23,6 +31,9 @@ function android {
   
 }
 
+#-------------------------------------------------------------------------------------
 #show env vars
-#Set-Alias -Name env -Value "gci env:* | sort-object name"
+function env {
+    gci env:* | sort-object name
+}
 
