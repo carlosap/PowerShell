@@ -3,7 +3,7 @@ write-host "`n  ## NODEJS INSTALLER ## `n"
 ### CONFIGURATION
 ###https://gist.github.com/noelmace/997a2e3d3ced0e1e6086066990036b16  (credits )
 # nodejs
-node-v
+
 $version = "10.16.3-x64"
 $url = "https://nodejs.org/dist/latest-v10.x/node-v$version.msi"
 
