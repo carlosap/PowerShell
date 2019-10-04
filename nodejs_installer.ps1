@@ -21,7 +21,8 @@ $vsc_url = "https://go.microsoft.com/fwlink/?LinkID=623230"
 
 # activate / desactivate any install
 $install_node = $TRUE
-$install_git = $FALSE
+$install_git = $TRUE
+$install_posh_git = $TRUE
 $install_gulp = $TRUE
 $install_jspm = $TRUE
 $install_eslint = $TRUE
@@ -93,7 +94,20 @@ if ($install_git) {
         start-Process $git_exe -Wait
         write-host "git installation done"
     }
+
+    if($install_posh_git) {
+        write-host "Installing Posh Git Module ..."
+        Install-Module posh-git
+        write-host "Installing PowerShellGet Module ..."
+        Install-Module PowerShellGet -Force -SkipPublisherCheck
+        write-host "Importing Posh Git Module ..."
+        Import-Module posh-git
+        write-host "Adding PoshGit to all Profiles ..."
+        Add-PoshGitToProfile -AllHosts
+    }
 }
+
+
 
 
 if ($install_node) {
