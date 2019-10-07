@@ -34,6 +34,7 @@ function android {
 #-------------------------------------------------------------------------------------
 #show env vars
 function env {
-    gci env:* | sort-object name
+    # gci env:* | sort-object name
+    Get-ChildItem env:* | sort-object name
 }
 
