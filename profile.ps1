@@ -21,9 +21,8 @@ function repos { set-location "C:\Users\$env:Username\source\repos" }
 function home { set-location $env:HOMEPATH }
 function doc { set-location "C:\Users\$env:UserName\Documents" }
 function github { set-location "C:\Users\$env:Username\source\repos\github.com" }
-
 function psroot { set-location $PSScriptRoot}
-
+function snippets {set-location "$env:APPDATA\Code\User\snippets"}
 #------------------------------------------------------------------------------------------
 #Android Emulator - make sure you installed in the default location
 function androids { 
