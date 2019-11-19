@@ -61,3 +61,51 @@ function rnuget(){
     #make sure the path is nuget.exe is global
     nuget restore
 }
+
+
+#-------------------------------------------------------------------------------------
+#git switch credentials
+function githotmail(){
+    #Clear Credentials
+    git config --global --unset credential.helper
+    git config --system --unset credential.helper
+
+    #Set Credentials
+    git config --global user.name perezca6576
+    git config --global user.email perezca6576@hotmail.com
+    git config --global credential.helper store
+
+    #Show credentials
+    git config user.name
+    git config user.email
+}
+
+function gitgmail(){
+    #Clear Credentials
+    git config --global --unset credential.helper
+    git config --system --unset credential.helper
+
+    #Set Credentials
+    git config --global user.name carlosap6576
+    git config --global user.email carlosap6576@gmail.com
+    git config --global credential.helper store
+    
+    #Show credentials
+    git config user.name
+    git config user.email
+}
+
+function gityahoo(){
+    #Clear Credentials
+    git config --global --unset credential.helper
+    git config --system --unset credential.helper
+
+    #Set Credentials
+    git config --global user.name carlosap6576
+    git config --global user.email perezca6576@yahoo.com
+    git config --global credential.helper store
+    
+    #Show credentials
+    git config user.name
+    git config user.email
+}
