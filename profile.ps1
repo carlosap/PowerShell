@@ -17,12 +17,61 @@ if(![System.IO.Directory]::Exists($tools_dir)){
     [System.IO.Directory]::CreateDirectory($tools_dir)
 }
 
+#--------------------------------------------------------------------------------------------
+#GoPath folder
+$go_code_dir = "C:\Users\$env:Username\gocode"
+$go_pkg_dir = "C:\Users\$env:Username\gocode\pkg"
+$go_bin_dir = "C:\Users\$env:Username\gocode\bin"
+$go_src_dir = "C:\Users\$env:Username\gocode\src"
+$go_github_dir = "C:\Users\$env:Username\gocode\src\github.com"
+
+if(![System.IO.Directory]::Exists($go_code_dir)){
+    write-host "Creating gocode Directory - $go_code_dir"
+    [System.IO.Directory]::CreateDirectory($go_code_dir)
+}
+
+if(![System.IO.Directory]::Exists($go_pkg_dir)){
+    write-host "Creating pkg Directory - $go_pkg_dir"
+    [System.IO.Directory]::CreateDirectory($go_pkg_dir)
+}
+
+if(![System.IO.Directory]::Exists($go_bin_dir)){
+    write-host "Creating bin Directory - $go_bin_dir"
+    [System.IO.Directory]::CreateDirectory($go_bin_dir)
+}
+
+if(![System.IO.Directory]::Exists($go_src_dir)){
+    write-host "Creating src Directory - $go_src_dir"
+    [System.IO.Directory]::CreateDirectory($go_src_dir)
+}
+
+if(![System.IO.Directory]::Exists($go_github_dir)){
+    write-host "Creating github Directory - $go_github_dir"
+    [System.IO.Directory]::CreateDirectory($go_github_dir)
+    write-host "Make sure you set the env variables as follow:"
+    write-host "*User Variable:"
+    write-host "================"
+    write-host "Add a new variable call GOPATH with value $go_code_dir"
+    write-host "In your PATH existing variable, add a new entry ['$GOPATH']"
+    write-host ""
+    write-host "*System Variable"
+    write-host "================"
+    write-host "In your PATH add the root bin folder [C:\Go\bin]"
+
+}
+
+
+#--------------------------------------------------------------------------------------------
 function repos { set-location "C:\Users\$env:Username\source\repos" }
 function home { set-location $env:HOMEPATH }
 function doc { set-location "C:\Users\$env:UserName\Documents" }
 function github { set-location "C:\Users\$env:Username\source\repos\github.com" }
 function psroot { set-location $PSScriptRoot}
 function snippets {set-location "$env:APPDATA\Code\User\snippets"}
+function gocode {set-location $go_code_dir}
+function gosrc {set-location $go_src_dir}
+function gogit {set-location $go_github_dir}
+
 #------------------------------------------------------------------------------------------
 #Android Emulator - make sure you installed in the default location
 function androids { 
