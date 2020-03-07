@@ -96,7 +96,7 @@ if(![System.IO.Directory]::Exists($go_github_dir)){
 }
 
 
-#--------------------------------------------------------------------------------------------
+#----------------------------------------Aliases---------------------------------------------
 function repos { set-location "C:\Users\$env:Username\source\repos" }
 function home { set-location $env:HOMEPATH }
 function doc { set-location "C:\Users\$env:UserName\Documents" }
@@ -106,6 +106,9 @@ function snippets {set-location "$env:APPDATA\Code\User\snippets"}
 function gocode {set-location $go_code_dir}
 function gosrc {set-location $go_src_dir}
 function gogit {set-location $go_github_dir}
+
+#------project related------
+function elysium {set-location "$go_github_dir\aagon00"}
 
 #------------------------------------------------------------------------------------------
 #Android Emulator - make sure you installed in the default location
