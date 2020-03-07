@@ -50,10 +50,8 @@ if(![System.IO.Directory]::Exists($go_github)){
 #--------------------------------------------------------------------------------------------
 function gocode { set-location "C:\Users\$env:Username\gocode" }
 function gosrc { set-location "C:\Users\$env:Username\gocode\src" }
-
-<<<<<<< HEAD
 function gogithub { set-location "C:\Users\$env:Username\gocode\src\github.com" }
-=======
+
 #--------------------------------------------------------------------------------------------
 #GoPath folder
 $go_code_dir = "C:\Users\$env:Username\gocode"
@@ -99,7 +97,6 @@ if(![System.IO.Directory]::Exists($go_github_dir)){
 
 
 #--------------------------------------------------------------------------------------------
->>>>>>> 8e972d9b0e20c4281dbce70f7ddf38cfd01f5368
 function repos { set-location "C:\Users\$env:Username\source\repos" }
 function home { set-location $env:HOMEPATH }
 function doc { set-location "C:\Users\$env:UserName\Documents" }
