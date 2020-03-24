@@ -1,7 +1,7 @@
 Import-Module posh-git
 
 # kubectl aliases : Credits to https://github.com/shanoor/kubectl-aliases-powershell
-'. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1' | Out-File $PROFILE.CurrentUserAllHosts -Encoding ascii -Append
+#'. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1' | Out-File $PROFILE.CurrentUserAllHosts -Encoding ascii -Append
 
 # Welcome message
 #Using Windows Terminal
