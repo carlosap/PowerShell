@@ -1,4 +1,8 @@
 Import-Module posh-git
+
+# kubectl aliases : Credits to https://github.com/shanoor/kubectl-aliases-powershell
+'. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1' | Out-File $PROFILE.CurrentUserAllHosts -Encoding ascii -Append
+
 # Welcome message
 "You are now entering PowerShell : " + $env:Username
 
@@ -160,7 +164,7 @@ function gityahoo(){
 }
 
 #--------------------------------File Helpers Functions-----------------------------------
-function filesize($file) {
+function size($file) {
    if($file) {
     $size = Format-FileSize((Get-Item $file).length)
     Write-Host("$file        size: $size")
@@ -175,4 +179,79 @@ function filesize($file) {
     ElseIf ($size -gt 1KB) {[string]::Format("{0:0.00} kB", $size / 1KB)}
     ElseIf ($size -gt 0) {[string]::Format("{0:0.00} B", $size)}
     Else {""}
-}
+}. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
