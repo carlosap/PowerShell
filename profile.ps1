@@ -293,3 +293,7 @@ function size($file) {
 . $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
 . $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
 . $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
+. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1
