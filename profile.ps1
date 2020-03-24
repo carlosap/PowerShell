@@ -4,22 +4,57 @@ Import-Module posh-git
 '. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1' | Out-File $PROFILE.CurrentUserAllHosts -Encoding ascii -Append
 
 # Welcome message
+#Using Windows Terminal
+#1- Make sure you start a powershell session as admin (right-click and select administrator)
+#2- run "Set-ExecutionPolicy Unrestricted" and select "A" to all
+#2- Make sure you create a profile.ps1 in your WindowsPowerShell (C:\Users\caper\Documents\WindowsPowerShell)
 "You are now entering PowerShell : " + $env:Username
 
-#------------------------------------------------------------------------------------------
-#Repos folder  
 $github_repo = "C:\Users\$env:Username\source\repos\github.com"
+$tools_dir = "$PSScriptRoot\tools\"
+$go_workplace = "C:\Users\$env:Username\gocode\src\github.com"
+$go_source = "C:\Users\$env:Username\gocode\src\"
+$go_github = "C:\Users\$env:Username\gocode\src\github.com"
+
+#-------------------------------------Directories-----------------------------------------------------
+#Repos folder  
+
 if(![System.IO.Directory]::Exists($github_repo)){
     write-host "Creating Github Repo - $github_repo"
     [System.IO.Directory]::CreateDirectory($github_repo)
 }
 
+
 #Tools directory
-$tools_dir = "$PSScriptRoot\tools\"
+
 if(![System.IO.Directory]::Exists($tools_dir)){
     write-host "Creating Tools Directory - $tools_dir"
     [System.IO.Directory]::CreateDirectory($tools_dir)
 }
+#----------------------------------------GOLang-------------------------------------------------------
+#Golang workplace directory - go env GOPATH
+
+if(![System.IO.Directory]::Exists($go_workplace)){
+    write-host "Creating Go Work Place Folder - $go_workplace"
+    [System.IO.Directory]::CreateDirectory($go_workplace)
+}
+
+#Golang Source directory - this is where all go source code is going to go
+if(![System.IO.Directory]::Exists($go_source)){
+    write-host "Creating Go Source (src) Folder - $go_source"
+    [System.IO.Directory]::CreateDirectory($go_source)
+}
+
+#Golang Github.com directory - this is where all your github.com repos
+if(![System.IO.Directory]::Exists($go_github)){
+    write-host "Creating Go Github Folder - $go_github"
+    [System.IO.Directory]::CreateDirectory($go_github)
+}
+
+#--------------------------------------------------------------------------------------------
+function gocode { set-location "C:\Users\$env:Username\gocode" }
+function gosrc { set-location "C:\Users\$env:Username\gocode\src" }
+function gogithub { set-location "C:\Users\$env:Username\gocode\src\github.com" }
 
 #--------------------------------------------------------------------------------------------
 #GoPath folder
@@ -65,7 +100,7 @@ if(![System.IO.Directory]::Exists($go_github_dir)){
 }
 
 
-#--------------------------------------------------------------------------------------------
+#----------------------------------------Aliases---------------------------------------------
 function repos { set-location "C:\Users\$env:Username\source\repos" }
 function home { set-location $env:HOMEPATH }
 function doc { set-location "C:\Users\$env:UserName\Documents" }
@@ -75,6 +110,9 @@ function snippets {set-location "$env:APPDATA\Code\User\snippets"}
 function gocode {set-location $go_code_dir}
 function gosrc {set-location $go_src_dir}
 function gogit {set-location $go_github_dir}
+
+#------project related------
+function elysium {set-location "$go_github_dir\aagon00"}
 
 #------------------------------------------------------------------------------------------
 #Android Emulator - make sure you installed in the default location
