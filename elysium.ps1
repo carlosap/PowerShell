@@ -1,19 +1,62 @@
 #Import-Module 'elysium'
 #TODO: need to add a verbose flag to make scripts run faster or slower with more details.
 $StartLocation = Get-Location
-$Guardian = "C:\Users\elysium\gocode\src\github.com\aagon00\Guardian"
 $FrozenTraceWeb = "C:\Users\elysium\gocode\src\github.com\aagon00\FrozenTraceWeb"
 $EphemeralIdentity = "C:\Users\elysium\gocode\src\github.com\aagon00\EphemeralIdentity"
 $outputFolder =  "C:\repos\Elysium" 
 $proxyFolder = "C:\repos\proxy"
 $StartTime = $(get-date)
+$testnum = 0
 
-Function Git-call(){
-    ##git checkout master
-    git fetch | git pull
-    yarn install
+#Mandatory Files
+$Guardian = "C:\Users\elysium\gocode\src\github.com\aagon00\Guardian"
+$GuardianUI = Join-Path -Path $Guardian -ChildPath "fuse"
+$GuardianBuild = Join-Path -Path $GuardianUI -ChildPath "build" 
 
-    write-host "git done " -ForegroundColor yellow
+Function Initialize-Deployment(){
+    Reset-TestNumber
+    Check-GitVersion
+    Stop-ElysiumProcess
+    Initialize-DeploymentDirectories
+}
+
+Function Install-YarnModules($uipath) {
+
+    if($uipath){
+        Set-Location -Path $uipath
+        write-host "UI Folder - $uipath"
+        Checkout-MasterAndPullBranch
+        yarn install
+        write-host "git done " -ForegroundColor yellow
+    }
+}
+
+Function Checkout-MasterAndPullBranch() {
+    try{
+        git checkout master
+        git fetch | git pull
+        write-host "success checkout master and pulled..." -ForegroundColor green
+        Start-Sleep -Milliseconds 300
+    }catch{
+        Write-Error "Error: Checkout-MasterAndPullBranch:" -Verbose
+        Complete-Deployment
+    }
+
+}
+
+Function Check-GitVersion(){
+
+    Update-TestTime("Check Git Version")
+    if (Get-Command git -errorAction SilentlyContinue) {
+        $git_current_version = (git --version)
+    }
+    if ($git_current_version) {
+        Write-Verbose "[GIT] $git_current_version detected. Proceeding ..." -Verbose
+        Start-Sleep -Milliseconds 1200
+    }else{
+        Write-Error "Error: Checkout-MasterBranch. make sure git is working in your environment" -Verbose
+        Complete-Deployment
+    }
 }
 
 Function Git-call-miami(){
@@ -35,7 +78,7 @@ Function Yarn-Build(){
 function Stop-ProcessByName($processName) {
     if ($processName) {
         Try {
-            Clear-Host
+            #Clear-Host
             get-process $processName -errorAction SilentlyContinue | select -expand id | ForEach-Object -Begin {
                 Write-Verbose "Analysing Process... $processName" -Verbose
                 Start-Sleep -Milliseconds 600
@@ -81,7 +124,7 @@ function Initialize-Directory($dirpath) {
             if (![System.IO.Directory]::Exists($dirpath)) {
                 [System.IO.Directory]::CreateDirectory($dirpath)
                 Write-Host "initialized directory...$dirpath" -ForegroundColor Green
-                Start-Sleep -Milliseconds 300
+                Start-Sleep -Milliseconds 500
             }
             else {
                 Write-Host "please wait. we removing files from directory - $dirpath" -ForegroundColor Yellow
@@ -96,51 +139,73 @@ function Initialize-Directory($dirpath) {
     }
 }
 
+function Stop-ElysiumProcess() {
+    Update-TestTime("Stop Elysium Process")
+    Stop-ProcessByName("guardian")
+    Stop-ProcessByName("authv2")
+    Stop-ProcessByName("SpartanGateway")
+    Stop-ProcessByName("frozentrace")
+    Stop-ProcessByName("frozentraceserver")
+    Stop-ProcessByName("ephemeralidentity")
+    Stop-ProcessByName("ephemeralidentityserver")
+}
 
-##--Kill existing Process---
-Stop-ProcessByName("guardian")
-Stop-ProcessByName("authv2")
-Stop-ProcessByName("SpartanGateway")
-Stop-ProcessByName("frozentrace")
-Stop-ProcessByName("frozentraceserver")
-Stop-ProcessByName("ephemeralidentity")
-Stop-ProcessByName("ephemeralidentityserver")
-Start-Sleep -Milliseconds 500
+function Initialize-DeploymentDirectories() {
+    Update-TestTime("Initialize Deployment Directories")
+    Search-Directory($Guardian)
+    Search-Directory($GuardianUI)
+    Search-Directory($FrozenTraceWeb)
+    Search-Directory($EphemeralIdentity)
+    Search-Directory($proxyFolder)
+    Initialize-Directory($outputFolder)
+}
 
+Function Increment-TestNumber() {
 
-##--Starts Automation Here---
-Clear-Host
-write-host "Starting scripts from folder: $StartLocation"
-Search-Directory($Guardian)
-Search-Directory($FrozenTraceWeb)
-Search-Directory($EphemeralIdentity)
-Search-Directory($proxyFolder)
-Initialize-Directory($outputFolder)
+    $global:testnum++
+    return $global:testnum
+}
 
+Function Reset-TestNumber() {
 
-Exit
+    $global:testnum = 0
+    return $global:testnum
+}
 
-#################################  Guardian  Start ################################
-Set-Location -Path $Guardian
+Function Update-TestTime($testname){
+    $elapsedTime = $(get-date) - $StartTime
+    $totalTime = "{0:HH:mm:ss}" -f ([datetime]$elapsedTime.Ticks)
+    $elapseMsg = "elapse time  - $totalTime" 
 
-write-host "setup - $Guardian" -ForegroundColor blue    
+    if($testname){
+        Clear-Host  
+        $testnum = Increment-TestNumber
+        write-host "=================================================[$elapseMsg]=====================================================" -ForegroundColor blue   
+        write-host " [$testnum] $testname" -ForegroundColor blue   
+        write-host "===============================================================================================================================" -ForegroundColor blue 
+        Start-Sleep -Milliseconds 500
+    }else{
+        write-host $elapseMsg
+    }
+}
 
-$GuardianUI = Join-Path -Path $Guardian -ChildPath "fuse"
-$GuardianBuild = Join-Path -Path $GuardianUI -ChildPath "build" 
+Function Complete-Deployment(){
+    Update-TestTime
+    Set-Location -Path $StartLocation
+    Exit
+}
 
-if(![System.IO.Directory]::Exists($GuardianUI)){
-    write-host "no Folder - $GuardianUI"
-}else{
-     Set-Location -Path $GuardianUI
-     write-host "UI Folder - $GuardianUI"
+Initialize-Deployment
+Update-TestTime("Guarding Deployment")
+Install-YarnModules($GuardianUI)
+Complete-Deployment
 
-     # checkout latest
-    Git-call
-    #Git-call-miami 
+#Git-call-miami 
+
 
      Yarn-Build
      write-host "build done - $GuardianUI" -ForegroundColor yellow     
-}
+
 
 if(![System.IO.Directory]::Exists($GuardianBuild)){
     write-host "no Folder - $GuardianBuild"
@@ -239,7 +304,7 @@ if(![System.IO.Directory]::Exists($FrozenTraceWebUI)){
      write-host "UI Folder - $FrozenTraceWebUI"
 
      # checkout latest
-     Git-call
+     Install-YarnModules
 
      Yarn-Build
      write-host "build done - $FrozenTraceWebUI" -ForegroundColor yellow
@@ -325,7 +390,7 @@ if(![System.IO.Directory]::Exists($EphemeralIdentityUI)){
      write-host "UI Folder - $EphemeralIdentityUI"
 
      # checkout latest
-     Git-call
+     Install-YarnModules
      #Git-call-miami 
      
      Yarn-Build
@@ -383,9 +448,5 @@ if(![System.IO.Directory]::Exists($EphemeralIdentityBuild)){
 #################################  EphemeralIdentity  end ################################
 
 
-$elapsedTime = $(get-date) - $StartTime
-$totalTime = "{0:HH:mm:ss}" -f ([datetime]$elapsedTime.Ticks)
-write-host "elapse time  - $totalTime" 
 
-Set-Location -Path $StartLocation
  
