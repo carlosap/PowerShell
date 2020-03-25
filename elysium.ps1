@@ -1,4 +1,5 @@
 #Import-Module 'elysium'
+#TODO: need to add a verbose flag to make scripts run faster or slower with more details.
 $StartLocation = Get-Location
 $Guardian = "C:\Users\elysium\gocode\src\github.com\aagon00\Guardian"
 $FrozenTraceWeb = "C:\Users\elysium\gocode\src\github.com\aagon00\FrozenTraceWeb"
@@ -31,19 +32,11 @@ Function Yarn-Build(){
     yarn build -Wait
 }
 
-Function Create-Paths($path)
-{
-  if(![System.IO.Directory]::Exists($path)){
-        write-host "Creating  - $path"
-        [System.IO.Directory]::CreateDirectory($path)
-    }
-}
-
-function StopProcessByName($processName) {
+function Stop-ProcessByName($processName) {
     if ($processName) {
         Try {
-            get-process $processName -errorAction SilentlyContinue  | select -expand id | ForEach-Object -Begin {
-                Clear-Host
+            Clear-Host
+            get-process $processName -errorAction SilentlyContinue | select -expand id | ForEach-Object -Begin {
                 Write-Verbose "Analysing Process... $processName" -Verbose
                 Start-Sleep -Milliseconds 600
             } -Process {
@@ -64,44 +57,68 @@ function StopProcessByName($processName) {
     }
 }
 
+function Search-Directory($dirpath) {
+    if ($dirpath) {
+        Try {
+            if (![System.IO.Directory]::Exists($dirpath)) {
+                Write-Error "directory path does not exist. - $dirpath"
+                Exit
+            } 
+            Start-Sleep -Milliseconds 300
+            Write-Host "found directory path...$dirpath" -ForegroundColor Green
+
+        }
+        Catch {
+            Write-Error "Error: Search-Directory:. No Actions took place" -Verbose
+        }
+
+    }
+}
+
+function Initialize-Directory($dirpath) {
+    if ($dirpath) {
+        Try {
+            if (![System.IO.Directory]::Exists($dirpath)) {
+                [System.IO.Directory]::CreateDirectory($dirpath)
+                Write-Host "initialized directory...$dirpath" -ForegroundColor Green
+                Start-Sleep -Milliseconds 300
+            }
+            else {
+                Write-Host "please wait. we removing files from directory - $dirpath" -ForegroundColor Yellow
+                Remove-Item  $dirpath -Recurse -Force
+                Start-Sleep -Milliseconds 200
+                Initialize-Directory($dirpath)
+            }
+        }
+        Catch {
+            Write-Error "Error: Search-Directory:. No Actions took place" -Verbose
+        }
+    }
+}
+
 
 ##--Kill existing Process---
-StopProcessByName("guardian")
-StopProcessByName("authv2")
-StopProcessByName("SpartanGateway")
-StopProcessByName("frozentrace")
-StopProcessByName("frozentraceserver")
-StopProcessByName("ephemeralidentity")
-StopProcessByName("ephemeralidentityserver")
+Stop-ProcessByName("guardian")
+Stop-ProcessByName("authv2")
+Stop-ProcessByName("SpartanGateway")
+Stop-ProcessByName("frozentrace")
+Stop-ProcessByName("frozentraceserver")
+Stop-ProcessByName("ephemeralidentity")
+Stop-ProcessByName("ephemeralidentityserver")
 Start-Sleep -Milliseconds 500
-#Exit
+
 
 ##--Starts Automation Here---
+Clear-Host
 write-host "Starting scripts from folder: $StartLocation"
-if(![System.IO.Directory]::Exists($Guardian)){
-    write-host "check your path please - $Guardian"
-}
-
-if(![System.IO.Directory]::Exists($FrozenTraceWeb)){
-    write-host "check your path please - $FrozenTraceWeb"
-}
-
-if(![System.IO.Directory]::Exists($EphemeralIdentity)){
-    write-host "check your path please - $EphemeralIdentity"
-}
+Search-Directory($Guardian)
+Search-Directory($FrozenTraceWeb)
+Search-Directory($EphemeralIdentity)
+Search-Directory($proxyFolder)
+Initialize-Directory($outputFolder)
 
 
-if(![System.IO.Directory]::Exists($proxyFolder)){
-    write-host "check your path please - $proxyFolder"
-}
-
-
-if(![System.IO.Directory]::Exists($outputFolder)){
-    Create-Paths -p $outputFolder
-}else{
-    write-host "deleting Folder - $outputFolder"
-    Remove-Item  $outputFolder
-}
+Exit
 
 #################################  Guardian  Start ################################
 Set-Location -Path $Guardian
@@ -135,7 +152,7 @@ if(![System.IO.Directory]::Exists($GuardianBuild)){
     $GuardianOutput = Join-Path -Path $GuardianOutputTop -ChildPath "build"   
 
      if(![System.IO.Directory]::Exists($GuardianOutput)){
-         Create-Paths -p $GuardianOutput
+        Initialize-Directory($GuardianOutput)
      }
         $GuardianAsset = Join-Path -Path $GuardianBuild -ChildPath "assets"
          write-host "copying build Folder - $GuardianAsset" 
@@ -237,7 +254,7 @@ if(![System.IO.Directory]::Exists($FrozenTraceWebBuild)){
     $FrozenTraceWebOutput = Join-Path -Path $outputFolder -ChildPath "FrozenTrace"
 
      if(![System.IO.Directory]::Exists($FrozenTraceWebOutput)){
-         Create-Paths -p $FrozenTraceWebOutput
+        Initialize-Directory($FrozenTraceWebOutput)
      }
 
 ############# copy to garidan build start ########################
@@ -258,7 +275,7 @@ if(![System.IO.Directory]::Exists($FrozenTraceWebBuild)){
 ############# copy to garidan build end  ########################
  
         $RootBuild = Join-Path $FrozenTraceWebOutput -ChildPath "build"
-        Create-Paths -p $RootBuild
+        Initialize-Directory($RootBuild)
 
         write-host "copying Folder ico" 
         Copy-Item -path $FrozenTraceWebBuild\*.ico  -Destination $RootBuild 
@@ -324,7 +341,7 @@ if(![System.IO.Directory]::Exists($EphemeralIdentityBuild)){
     $EphemeralIdentityOutput = Join-Path -Path $outputFolder -ChildPath "EphemeralIdentity"
 
      if(![System.IO.Directory]::Exists($EphemeralIdentityOutput)){
-         Create-Paths -p $EphemeralIdentityOutput
+        Initialize-Directory($EphemeralIdentityOutput)
      }
 
 ############# copy to garidan build start ########################
@@ -338,7 +355,7 @@ if(![System.IO.Directory]::Exists($EphemeralIdentityBuild)){
 ############# copy to garidan build end  ########################
  
         $RootBuild = Join-Path $EphemeralIdentityOutput -ChildPath "build"
-        Create-Paths -p $RootBuild
+        Initialize-Directory($RootBuild)
 
         write-host "copying Folder ico" 
         Copy-Item -path $EphemeralIdentityBuild\*.ico  -Destination $RootBuild 
