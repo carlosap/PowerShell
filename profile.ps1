@@ -1,4 +1,8 @@
 Import-Module posh-git
+
+# kubectl aliases : Credits to https://github.com/shanoor/kubectl-aliases-powershell
+#'. $Home\Documents\WindowsPowerShell\kubectl_aliases.ps1' | Out-File $PROFILE.CurrentUserAllHosts -Encoding ascii -Append
+
 # Welcome message
 #Using Windows Terminal
 #1- Make sure you start a powershell session as admin (right-click and select administrator)
@@ -198,7 +202,7 @@ function gityahoo(){
 }
 
 #--------------------------------File Helpers Functions-----------------------------------
-function filesize($file) {
+function size($file) {
    if($file) {
     $size = Format-FileSize((Get-Item $file).length)
     Write-Host("$file        size: $size")
