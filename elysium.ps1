@@ -1,3 +1,4 @@
+#Import-Module 'elysium'
 $StartLocation = Get-Location
 $Guardian = "C:\Users\elysium\gocode\src\github.com\aagon00\Guardian"
 $FrozenTraceWeb = "C:\Users\elysium\gocode\src\github.com\aagon00\FrozenTraceWeb"
@@ -73,7 +74,7 @@ StopProcessByName("frozentraceserver")
 StopProcessByName("ephemeralidentity")
 StopProcessByName("ephemeralidentityserver")
 Start-Sleep -Milliseconds 500
-Exit
+#Exit
 
 ##--Starts Automation Here---
 write-host "Starting scripts from folder: $StartLocation"
