@@ -15,7 +15,7 @@ $GuardianBuild = Join-Path -Path $GuardianUI -ChildPath "build"
 
 Function Initialize-Deployment(){
     Reset-TestNumber
-    Check-GitVersion
+    Test-GitVersion
     Stop-ElysiumProcess
     Initialize-DeploymentDirectories
 }
@@ -23,28 +23,61 @@ Function Initialize-Deployment(){
 Function Install-YarnModules($uipath) {
 
     if($uipath){
+        Update-TestTime("Installing Yarn Modules - " + $uipath)
         Set-Location -Path $uipath
-        write-host "UI Folder - $uipath"
-        Checkout-MasterAndPullBranch
-        yarn install
+        Test-MasterBranch($uipath)
+        Install-Yarn($uipath)
         write-host "git done " -ForegroundColor yellow
     }
 }
 
-Function Checkout-MasterAndPullBranch() {
+Function Install-Yarn($uipath) {
     try{
-        git checkout master
-        git fetch | git pull
-        write-host "success checkout master and pulled..." -ForegroundColor green
-        Start-Sleep -Milliseconds 300
+        Update-TestTime("Yarn Install - " + $uipath)
+        yarn install
     }catch{
-        Write-Error "Error: Checkout-MasterAndPullBranch:" -Verbose
+        Write-Error "Error: Install-Yarn:" -Verbose
         Complete-Deployment
     }
 
 }
 
-Function Check-GitVersion(){
+Function Restore-Yarn($uipath) {
+    try{
+        Update-TestTime("Yarn Build - " + $uipath)
+        Yarn-Build -Wait
+    }catch{
+        Write-Error "Error: Restore-Yarn:" -Verbose
+        Complete-Deployment
+    }
+
+}
+
+Function Test-YarnBuild($buildpath) {
+    try{
+        Update-TestTime("Test Yarn Build - " + $buildpath)
+        Search-Directory($buildpath)
+    }catch{
+        Write-Error "Error: Test-YarnBuild:" -Verbose
+        Complete-Deployment
+    }
+}
+
+Function Test-MasterBranch($uipath) {
+    try{
+        Update-TestTime("Git Checkout Master Branch - " + $uipath)
+        git checkout master
+        git fetch | git pull
+        write-host "success checkout master and pulled..." -ForegroundColor green
+        Start-Sleep -Milliseconds 300
+    }catch{
+        Write-Error "Error: Test-MasterBranch:" -Verbose
+        Complete-Deployment
+    }
+
+}
+
+Function Test-GitVersion(){
 
     Update-TestTime("Check Git Version")
     if (Get-Command git -errorAction SilentlyContinue) {
@@ -54,7 +87,7 @@ Function Check-GitVersion(){
         Write-Verbose "[GIT] $git_current_version detected. Proceeding ..." -Verbose
         Start-Sleep -Milliseconds 1200
     }else{
-        Write-Error "Error: Checkout-MasterBranch. make sure git is working in your environment" -Verbose
+        Write-Error "Error: Test-GitVersion. make sure git is working in your environment" -Verbose
         Complete-Deployment
     }
 }
@@ -105,7 +138,7 @@ function Search-Directory($dirpath) {
         Try {
             if (![System.IO.Directory]::Exists($dirpath)) {
                 Write-Error "directory path does not exist. - $dirpath"
-                Exit
+                Complete-Deployment
             } 
             Start-Sleep -Milliseconds 300
             Write-Host "found directory path...$dirpath" -ForegroundColor Green
@@ -160,7 +193,7 @@ function Initialize-DeploymentDirectories() {
     Initialize-Directory($outputFolder)
 }
 
-Function Increment-TestNumber() {
+Function Test-IncrementNumber() {
 
     $global:testnum++
     return $global:testnum
@@ -179,11 +212,11 @@ Function Update-TestTime($testname){
 
     if($testname){
         Clear-Host  
-        $testnum = Increment-TestNumber
+        $testnum = Test-IncrementNumber
         write-host "=================================================[$elapseMsg]=====================================================" -ForegroundColor blue   
         write-host " [$testnum] $testname" -ForegroundColor blue   
         write-host "===============================================================================================================================" -ForegroundColor blue 
-        Start-Sleep -Milliseconds 500
+        Start-Sleep -Milliseconds 700
     }else{
         write-host $elapseMsg
     }
@@ -196,20 +229,16 @@ Function Complete-Deployment(){
 }
 
 Initialize-Deployment
-Update-TestTime("Guarding Deployment")
 Install-YarnModules($GuardianUI)
+Restore-Yarn($GuardianUI)
+Test-YarnBuild($GuardianBuild)
 Complete-Deployment
 
 #Git-call-miami 
 
-
-     Yarn-Build
-     write-host "build done - $GuardianUI" -ForegroundColor yellow     
-
-
-if(![System.IO.Directory]::Exists($GuardianBuild)){
-    write-host "no Folder - $GuardianBuild"
-}else{
+# if(![System.IO.Directory]::Exists($GuardianBuild)){
+#     write-host "no Folder - $GuardianBuild"
+#}else{
      Set-Location -Path $GuardianBuild
      write-host "copying build Folder - $GuardianBuild" 
 
@@ -285,7 +314,7 @@ if(![System.IO.Directory]::Exists($GuardianBuild)){
         # Set-Location -Path $proxyFolder
         # Copy-Item -path $proxyFolder\ocelot.json  -Destination $GuardianOutputTop
 
-}
+#}
 #################################  Guardian  end ################################
 
 #################################  FrozenTraceWeb  Start ################################
