@@ -8,10 +8,16 @@ $proxyFolder = "C:\repos\proxy"
 $StartTime = $(get-date)
 $testnum = 0
 
-#Mandatory Files
+#Guardian Source
 $Guardian = "C:\Users\elysium\gocode\src\github.com\aagon00\Guardian"
 $GuardianUI = Join-Path -Path $Guardian -ChildPath "fuse"
-$GuardianBuild = Join-Path -Path $GuardianUI -ChildPath "build" 
+$GuardianBuild = Join-Path -Path $GuardianUI -ChildPath "build"
+
+#Guardian Output
+$GuardianOutputTop = Join-Path -Path $outputFolder -ChildPath "Guardian"
+$GuardianOutput = Join-Path -Path $GuardianOutputTop -ChildPath "build" 
+$GuardianAsset = Join-Path -Path $GuardianBuild -ChildPath "assets" 
+$GuardianStatic = Join-Path -Path $GuardianBuild -ChildPath "static"
 
 Function Initialize-Deployment(){
     Reset-TestNumber
@@ -62,6 +68,53 @@ Function Test-YarnBuild($buildpath) {
         Complete-Deployment
     }
 }
+
+Function Copy-GuardianAssets() {
+    try{
+        Update-TestTime("Copying Assets Folder - " + $GuardianBuild)
+        Set-Location -Path $GuardianBuild
+        Initialize-Directory($GuardianOutput)
+        Copy-Item $GuardianAsset -Destination $GuardianOutput -recurse
+    }catch{
+        Write-Error "Error: Copy-GuardianAssets:" -Verbose
+        Complete-Deployment
+    }
+}
+
+Function Copy-GuardianStatic() {
+    try{
+        Update-TestTime("Copying Static Folder - " + $GuardianBuild)
+        Set-Location -Path $GuardianBuild
+        Copy-Item $GuardianStatic -Destination $GuardianOutput -recurse 
+    }catch{
+        Write-Error "Error: Copy-GuardianStatic:" -Verbose
+        Complete-Deployment
+    }
+}
+
+Function Copy-GuardianWebIco() {
+    try{
+        Update-TestTime("Copying Web Ico  - " + $GuardianBuild)
+        Set-Location -Path $GuardianBuild
+        Copy-Item -path $GuardianBuild\*.ico  -Destination $GuardianOutput 
+    }catch{
+        Write-Error "Error: Copy-GuardianStatic:" -Verbose
+        Complete-Deployment
+    }
+}
+
+Function Copy-GuardianWebHtml() {
+    try{
+        Update-TestTime("Copying Web HTML  - " + $GuardianBuild)
+        Set-Location -Path $GuardianBuild
+        Copy-Item -path $GuardianBuild\*.html  -Destination $GuardianOutput
+    }catch{
+        Write-Error "Error: Copy-GuardianWebHtml:" -Verbose
+        Complete-Deployment
+    }
+}
+
+
 
 Function Test-MasterBranch($uipath) {
     try{
@@ -232,36 +285,15 @@ Initialize-Deployment
 Install-YarnModules($GuardianUI)
 Restore-Yarn($GuardianUI)
 Test-YarnBuild($GuardianBuild)
+Copy-GuardianAssets
+Copy-GuardianStatic
+Copy-GuardianWebIco
+Copy-GuardianWebHtml
 Complete-Deployment
 
 #Git-call-miami 
 
-# if(![System.IO.Directory]::Exists($GuardianBuild)){
-#     write-host "no Folder - $GuardianBuild"
-#}else{
-     Set-Location -Path $GuardianBuild
-     write-host "copying build Folder - $GuardianBuild" 
 
-    $GuardianOutputTop = Join-Path -Path $outputFolder -ChildPath "Guardian"
-    $GuardianOutput = Join-Path -Path $GuardianOutputTop -ChildPath "build"   
-
-     if(![System.IO.Directory]::Exists($GuardianOutput)){
-        Initialize-Directory($GuardianOutput)
-     }
-        $GuardianAsset = Join-Path -Path $GuardianBuild -ChildPath "assets"
-         write-host "copying build Folder - $GuardianAsset" 
-        Copy-Item $GuardianAsset -Destination $GuardianOutput -recurse
-
-        $GuardianStatic = Join-Path -Path $GuardianBuild -ChildPath "static"
-        write-host "copying build Folder - $GuardianAsset" 
-        Copy-Item $GuardianStatic -Destination $GuardianOutput -recurse 
-
-        write-host "copying  ico" 
-        Copy-Item -path $GuardianBuild\*.ico  -Destination $GuardianOutput 
-
-        write-host "copying  html" 
-        Copy-Item -path $GuardianBuild\*.html  -Destination $GuardianOutput 
-      
         write-host "copying Folder env" 
         Copy-Item -path $Guardian\env  -Destination $GuardianOutputTop  -recurse
 
