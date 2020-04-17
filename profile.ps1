@@ -213,7 +213,7 @@ function touch($file){
 function size($file) {
    if($file) {
     $size = Format-FileSize((Get-Item $file).length)
-    Write-Host("$file        size: $size")
+    Write-Host("$file        $size")
    }
  }
 
