@@ -202,13 +202,23 @@ function gityahoo(){
 }
 
 #--------------------------------File Helpers Functions-----------------------------------
+
+function touch($file){
+    if($file) {
+        echo $null >> $file
+        Write-Host("New File Created        size: $file")
+    }
+}
+
 function size($file) {
    if($file) {
     $size = Format-FileSize((Get-Item $file).length)
     Write-Host("$file        size: $size")
    }
  }
- 
+
+
+
  Function Format-FileSize() {
     Param ([int]$size)
     If ($size -gt 1TB) {[string]::Format("{0:0.00} TB", $size / 1TB)}
