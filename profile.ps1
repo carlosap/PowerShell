@@ -205,8 +205,12 @@ function gityahoo(){
 
 function touch($file){
     if($file) {
-        echo $null >> $file
-        Write-Host("New File Created        size: $file")
+        $StartLocation = Get-Location
+        $path = Join-Path -Path $StartLocation -ChildPath $file
+        if(![System.IO.File]::Exists($path)){
+            New-Item $file
+            Write-Host("New File Created        $file")
+        } 
     }
 }
 
