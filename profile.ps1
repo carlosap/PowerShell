@@ -101,10 +101,9 @@ if(![System.IO.Directory]::Exists($go_github_dir)){
 
 
 #----------------------------------------Aliases---------------------------------------------
-function repos { set-location "C:\Users\$env:Username\source\repos" }
+function repos { set-location $go_github_dir }
 function home { set-location $env:HOMEPATH }
 function doc { set-location "C:\Users\$env:UserName\Documents" }
-function github { set-location "C:\Users\$env:Username\source\repos\github.com" }
 function psroot { set-location $PSScriptRoot}
 function snippets {set-location "$env:APPDATA\Code\User\snippets"}
 function gocode {set-location $go_code_dir}
@@ -231,4 +230,30 @@ function size($file) {
     ElseIf ($size -gt 1KB) {[string]::Format("{0:0.00} kB", $size / 1KB)}
     ElseIf ($size -gt 0) {[string]::Format("{0:0.00} B", $size)}
     Else {""}
+}
+
+Function remove-node-modules () {
+
+    #Get-ChildItem -Path $go_github_dir -Include "node_modules" -Recurse -Directory | Remove-Item -Recurse -Force
+    Get-ChildItem -Path $go_github_dir -Recurse -Directory | ForEach-Object {
+     if($_.Name -eq "node_modules"){
+        Write-Output $("Deleting module..."  + $_.FullName) $_.
+        Remove-Directory($_.FullName)
+     }
+    }
+}
+function Remove-Directory($dirpath, $Include='*') {
+    if ($dirpath) {
+        Try {
+                Write-Host "please wait. we removing files from directory - $dirpath" -ForegroundColor Yellow
+                #[System.IO.Directory]::Delete($dirpath)
+                Remove-Item -WhatIf "$($dirpath)" -Recurse -Force
+                #Get-ChildItem -Path $dirpath -Recurse -Directory | Remove-Item -Recurse -Force
+                Start-Sleep -Milliseconds 100
+            
+        }
+        Catch {
+            Write-Error "Error: Search-Directory:. No Actions took place" -Verbose
+        }
+    }
 }
