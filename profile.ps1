@@ -8,6 +8,8 @@ Import-Module posh-git
 #1- Make sure you start a powershell session as admin (right-click and select administrator)
 #2- run "Set-ExecutionPolicy Unrestricted" and select "A" to all
 #2- Make sure you create a profile.ps1 in your WindowsPowerShell (C:\Users\caper\Documents\WindowsPowerShell)
+#3- Run nodejs install .\install_nodejs.psq
+
 "You are now entering PowerShell : " + $env:Username
 
 $github_repo = "C:\Users\$env:Username\source\repos\github.com"
