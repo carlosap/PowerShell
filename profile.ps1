@@ -12,19 +12,19 @@ Import-Module posh-git
 
 "You are now entering PowerShell : " + $env:Username
 
-$github_repo = "C:\Users\$env:Username\source\repos\github.com"
+
 $tools_dir = "$PSScriptRoot\tools\"
 $go_workplace = "C:\Users\$env:Username\gocode\src\github.com"
 $go_source = "C:\Users\$env:Username\gocode\src\"
 $go_github = "C:\Users\$env:Username\gocode\src\github.com"
+# $github_repo = "C:\Users\$env:Username\source\repos\github.com"
+# #-------------------------------------Directories-----------------------------------------------------
+# #Repos folder  
 
-#-------------------------------------Directories-----------------------------------------------------
-#Repos folder  
-
-if(![System.IO.Directory]::Exists($github_repo)){
-    write-host "Creating Github Repo - $github_repo"
-    [System.IO.Directory]::CreateDirectory($github_repo)
-}
+# if(![System.IO.Directory]::Exists($github_repo)){
+#     write-host "Creating Github Repo - $github_repo"
+#     [System.IO.Directory]::CreateDirectory($github_repo)
+# }
 
 
 #Tools directory
