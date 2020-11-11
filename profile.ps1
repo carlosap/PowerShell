@@ -112,8 +112,16 @@ function gocode {set-location $go_code_dir}
 function gosrc {set-location $go_src_dir}
 function gogit {set-location $go_github_dir}
 
+function natss {gnatsd -DV -m 8222}
+function natt {nats-top}
+
 #------project related------
-function elysium {set-location "$go_github_dir\aagon00"}
+function elysium {set-location "$go_github_dir\BlueObsidianSolutions"}
+
+function guardian {set-location "$go_github_dir\BlueObsidianSolutions\GuardianServer"}
+
+function frozentrace {set-location "$go_github_dir\BlueObsidianSolutions\FrozenTraceServer"}
+function lisa {set-location "$go_github_dir\totalwinelabs\sa_mobile"}
 
 #------------------------------------------------------------------------------------------
 #Android Emulator - make sure you installed in the default location
